@@ -3,15 +3,16 @@
 /* ARTISTS (PLURAL) CONTROLLER */
 
 juke.controller('ArtistsCtrl', function ($scope, $log, $rootScope, ArtistFactory) {
+$scope.showMe = true;
 
-  $scope.$on('viewSwap', function (event, data) {
-    if (data.name !== 'allArtists') return $scope.showMe = false;
-    $scope.showMe = true;
-  });
+  // $scope.$on('viewSwap', function (event, data) {
+  //   if (data.name !== 'allArtists') return $scope.showMe = false;
+  //   $scope.showMe = true;
+  // });
 
-  $scope.viewOneArtist = function (artist) {
-    $rootScope.$broadcast('viewSwap', { name: 'oneArtist', id: artist._id });
-  };
+  // $scope.viewOneArtist = function (artist) {
+  //   $rootScope.$broadcast('viewSwap', { name: 'oneArtist', id: artist._id });
+  // };
 
   ArtistFactory.fetchAll()
   .then(artists => {
