@@ -8,21 +8,14 @@ juke.config(function($stateProvider) {
     template: allAlbumsStateTemplate
   });
   $stateProvider.state('OneAlbumsState', {
-    controller: function($scope, $stateParams, $log, AlbumFactory){
-    $scope.showMe = true;
-      AlbumFactory.fetchById($stateParams.albumId)
-      .then(album => {
-        $scope.album = album;
-      })
-      .catch($log.error);
-    },
+    controller: 'AlbumCtrl',
     url: '/albums/:albumId',
     template: albumStateTemplate
   });
 });
 
 var allAlbumsStateTemplate="";
-allAlbumsStateTemplate += "        <div ng-controller=\"AlbumsCtrl\" ng-show=\"showMe\">";
+allAlbumsStateTemplate += "        <div ng-controller=\"AlbumsCtrl\">";
 allAlbumsStateTemplate += "          <h3>Albums<\/h3>";
 allAlbumsStateTemplate += "          <div class=\"row\">";
 allAlbumsStateTemplate += "            <div class=\"col-xs-4\" ng-repeat=\"album in albums\">";
@@ -40,7 +33,7 @@ allAlbumsStateTemplate += "          <\/div>";
 allAlbumsStateTemplate += "        <\/div>";
 
 var albumStateTemplate="";
-albumStateTemplate += "<div class=\"album\" ng-controller=\"AlbumCtrl\" ng-show=\"showMe\">";
+albumStateTemplate += "<div class=\"album\" ng-controller=\"AlbumCtrl\">";
 albumStateTemplate += "          <p>";
 albumStateTemplate += "            <h3>{{ album.name }}<\/h3>";
 albumStateTemplate += "            <img ng-src=\"{{ album.imageUrl }}\" class=\"img-thumbnail\">";
