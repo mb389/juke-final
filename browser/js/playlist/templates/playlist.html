@@ -1,0 +1,13 @@
+<form name="playlistForm" novalidate>
+<h2>Name your playlist:</h2>
+
+Title: <input name="name" type="text" ng-model="playlistInput.name" required ng-maxlength="16" >
+<button ng-click="addTitle()" ng-disabled="playlistForm.$invalid" ui-sref="playlists.songAdder">Add Song</button>
+<div class="alert alert-warning" ng-show="playlistForm.name.$invalid && playlistForm.name.$touched">Please enter a name</div>
+<pre>
+   {{ playlistForm | json}}
+</pre>
+
+</form>
+
+<ui-view></ui-view>

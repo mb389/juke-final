@@ -1,19 +1,13 @@
 'use strict';
 
-juke.controller('SidebarCtrl', function($scope) {
+juke.controller('SidebarCtrl', function ($scope, $rootScope) {
 
-  $scope.viewAlbums = function() {
-    // $rootScope.$broadcast('viewSwap', { name: 'allAlbums'});
-    $scope.changeState = function() {
-      $state.go('AllAlbumsState');
-    };
-    // $rootScope.$broadcast('viewSwap', { name: 'oneAlbum', id: album._id });
+  $scope.viewAlbums = function () {
+    $rootScope.$broadcast('viewSwap', { name: 'allAlbums'});
   };
 
-  $scope.viewAllArtists = function() {
-    $scope.changeState = function() {
-      $state.go('AllArtistsState');
-    };
-    // $rootScope.$broadcast('viewSwap', { name: 'allArtists' });
+  $scope.viewAllArtists = function () {
+    $rootScope.$broadcast('viewSwap', { name: 'allArtists' });
   };
+
 });

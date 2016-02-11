@@ -1,74 +1,37 @@
 'use strict';
 
-juke.config(function($stateProvider) {
-  // define a something state
-  $stateProvider.state('AllArtistsState', {
-    controller: 'ArtistsCtrl',
+juke.config(function ($stateProvider) {
+
+  $stateProvider.state('artists', {
     url: '/artists',
-    template: allArtistsStateTemplate
+    templateUrl: '/js/artist/templates/artists.html',
+    controller: 'ArtistsCtrl',
+    resolve: {
+      allArtists: function (ArtistFactory) {
+        return ArtistFactory.fetchAll();
+      }
+    }
   });
-  
-  // $stateProvider.state('OneArtistState', {
-  //   controller: function($scope, $stateParams, $log, ArtistFactory){
-  //   $scope.showMe = true;
-  //     ArtistFactory.fetchById($stateParams.artistId)
-  //     .then(artist => {
-  //       $scope.artist = artist;
-  //     })
-  //     .catch($log.error);
-  //   },
-  //   url: '/artists/:artistId',
-  //   template: artistStateTemplate
-  // });
+
+  $stateProvider.state('artist', {
+    url: '/artist/:artistId',
+    templateUrl: '/js/artist/templates/artist.html',
+    controller: 'ArtistCtrl',
+    resolve: {
+      theArtist: function (ArtistFactory, $stateParams) {
+        return ArtistFactory.fetchById($stateParams.artistId);
+      }
+    }
+  });
+
+  $stateProvider.state('artist.albums', {
+    url: '/albums',
+    templateUrl: '/js/artist/templates/artist-albums.html'
+  });
+
+  $stateProvider.state('artist.songs', {
+    url: '/songs',
+    templateUrl: '/js/artist/templates/artist-songs.html'
+  });
+
 });
-
-var allArtistsStateTemplate="";
-allArtistsStateTemplate += "        <div ng-show=\"showMe\" ng-controller=\"ArtistsCtrl\">";
-allArtistsStateTemplate += "          <h3>Artists<\/h3>";
-allArtistsStateTemplate += "            <div class=\"list-group\">";
-allArtistsStateTemplate += "              <div class=\"list-group-item\" ng-repeat=\"artist in artists\">";
-allArtistsStateTemplate += "              <a ui-sref=\"OneArtistState({ artist: artist })\">{{ artist.name }}<\/a>";
-allArtistsStateTemplate += "            <\/div>";
-allArtistsStateTemplate += "          <\/div>";
-allArtistsStateTemplate += "        <\/div>";
-
-// var artistStateTemplate="";
-// artistStateTemplate += "        <div ng-show=\"showMe\" ng-controller=\"ArtistCtrl\">";
-// artistStateTemplate += "            <h3>{{ artist.name }}<\/h3>";
-// artistStateTemplate += "            <h3>Albums<\/h3>";
-// artistStateTemplate += "            <div class=\"row\">";
-// artistStateTemplate += "              <div class=\"col-xs-4\" ng-repeat=\"album in artist.albums\">";
-// artistStateTemplate += "                <a class=\"thumbnail\" href=\"#\" ng-click=\"viewOneAlbum(album)\">";
-// artistStateTemplate += "                  <img ng-src=\"{{ album.imageUrl }}\">";
-// artistStateTemplate += "                  <div class=\"caption\">";
-// artistStateTemplate += "                    <h5>";
-// artistStateTemplate += "                      <span>{{ album.name }}<\/span>";
-// artistStateTemplate += "                    <\/h5>";
-// artistStateTemplate += "                    <small>{{ album.songs.length }} songs<\/small>";
-// artistStateTemplate += "                  <\/div>";
-// artistStateTemplate += "                <\/a>";
-// artistStateTemplate += "              <\/div>";
-// artistStateTemplate += "            <\/div>";
-// artistStateTemplate += "            <table class='table'>";
-// artistStateTemplate += "              <thead>";
-// artistStateTemplate += "                <tr>";
-// artistStateTemplate += "                  <th><\/th>";
-// artistStateTemplate += "                  <th>Name<\/th>";
-// artistStateTemplate += "                  <th>Artists<\/th>";
-// artistStateTemplate += "                  <th>Genres<\/th>";
-// artistStateTemplate += "                <\/tr>";
-// artistStateTemplate += "              <\/thead>";
-// artistStateTemplate += "              <tbody>";
-// artistStateTemplate += "                <tr ng-repeat=\"song in artist.songs\" ng-class=\"{active: song === getCurrentSong() }\">";
-// artistStateTemplate += "                  <td>";
-// artistStateTemplate += "                    <button class=\"btn btn-default btn-xs\" ng-click=\"toggle(song)\">";
-// artistStateTemplate += "                      <span class=\"glyphicon\" ng-class=\"{ 'glyphicon-pause': isPlaying(song), 'glyphicon-play': !isPlaying(song) }\"><\/span>";
-// artistStateTemplate += "                    <\/button>";
-// artistStateTemplate += "                  <\/td>";
-// artistStateTemplate += "                  <td>{{ song.name }}<\/td>";
-// artistStateTemplate += "                  <td><span ng-repeat=\"artist in song.artists\">{{ artist.name }}{{ $last ? '' : ', ' }}<\/span><\/td>";
-// artistStateTemplate += "                  <td>{{ song.genres.join(', ') }}<\/td>";
-// artistStateTemplate += "                <\/tr>";
-// artistStateTemplate += "              <\/tbody>";
-// artistStateTemplate += "            <\/table>";
-// artistStateTemplate += "        <\/div>";
