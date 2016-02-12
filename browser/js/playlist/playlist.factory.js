@@ -21,6 +21,13 @@ juke.factory('PlaylistFactory', function ($http, $q, AlbumFactory, SongFactory) 
         });
     };
 
+    PlaylistFactory.getAll = function () {
+      return $http.get("/api/playlists")
+      .then(function (response) {
+         return response;
+      })
+   }
+
     return PlaylistFactory;
 
 });
