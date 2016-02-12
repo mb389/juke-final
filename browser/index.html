@@ -44,6 +44,9 @@
             <p>
               <a ui-sref="playlists" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-plus"></span> PLAYLIST</a>
             </p>
+            <p class="playlist-item"ng-repeat="playlist in allPlaylists">
+               <a>{{ playlist.name }}</a>
+            </p>
           </section>
         </sidebar>
       </div>

@@ -4,7 +4,7 @@ juke.controller('PlaylistCtrl', function ($scope, $rootScope, PlayerFactory, Pla
 
    $scope.addTitle = function() {
       PlaylistFactory.create($scope.playlistInput);
-      $scope.playlistInput.name="";
+      //$scope.playlistInput.name="";
       $scope.playlistForm.name.$touched=false;
       console.log($scope.playlistInput);
    }

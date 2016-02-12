@@ -56,6 +56,7 @@ router.delete('/:playlistId', function (req, res, next) {
   .then(null, next);
 });
 
+
 router.get('/:playlistId/songs', (req, res) => res.json(req.playlist.songs) );
 
 router.post('/:playlistId/songs', function (req, res, next) {
