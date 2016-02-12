@@ -11,21 +11,42 @@ juke.factory('PlaylistFactory', function ($http, $q, AlbumFactory, SongFactory) 
    // to the playlist state state
 
    // then start generating rown on table with added songs
+   var cachedPlaylists = [];
 
     var PlaylistFactory = {};
 
     PlaylistFactory.create = function (data) {
         return $http.post('/api/playlists', data)
         .then(function (response) {
-            return response.data;
+          var playlist = response.data;
+          cachedPlaylists.push(playlist)
+          return playlist;
         });
     };
 
     PlaylistFactory.getAll = function () {
       return $http.get("/api/playlists")
       .then(function (response) {
-         return response;
+        angular.copy(response.data, cachedPlaylists)
+        return cachedPlaylists;
       })
+   }
+
+   PlaylistFactory.getOnePlaylist = function (playlistName) {
+    // get from array
+    cachedPlaylists.forEach(function (element) {
+      if (element.name == playlistName) {
+        return element;
+      }
+    })
+   }
+
+   PlaylistFactory.addSongToPlaylist = function (playlist, song) {
+    return $http.post("/" + playlist._id + "/songs", song)
+    .then(function (response) {
+      console.log(response)
+      return response;
+    })
    }
 
     return PlaylistFactory;

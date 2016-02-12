@@ -6,7 +6,7 @@ juke.config(function ($stateProvider) {
     controller: 'PlaylistCtrl'
   })
   .state('playlists.songAdder', {
-     url: '/addSongs',
+     url: '/playlists/:playlistName',
      templateUrl:'/js/playlist/templates/songAdder.html'
  })
   });

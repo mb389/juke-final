@@ -14,7 +14,7 @@ juke.controller('SidebarCtrl', function ($scope, $rootScope, PlaylistFactory) {
   $scope.viewAllPlaylists = function () {
      PlaylistFactory.getAll()
      .then(function (allPlaylists) {
-     $scope.allPlaylists = allPlaylists.data;
+     $scope.allPlaylists = allPlaylists;
      })
 
  }
