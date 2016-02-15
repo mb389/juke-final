@@ -15,7 +15,7 @@ juke.config(function ($stateProvider) {
 
   $stateProvider.state('artist', {
     url: '/artist/:artistId',
-    templateUrl: '/js/artist/templates/artist.html',
+    template: '<h4>SONGS</h4><song-list songs="artist.songs"></song-list>',
     controller: 'ArtistCtrl',
     resolve: {
       theArtist: function (ArtistFactory, $stateParams) {
@@ -26,7 +26,7 @@ juke.config(function ($stateProvider) {
 
   $stateProvider.state('artist.albums', {
     url: '/albums',
-    templateUrl: '/js/artist/templates/artist-albums.html'
+    template: '<album-list albums="artist.albums"></album-list>'
   });
 
   $stateProvider.state('artist.songs', {

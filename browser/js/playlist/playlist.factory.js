@@ -1,54 +1,49 @@
-juke.factory('PlaylistFactory', function ($http, $q, AlbumFactory, SongFactory) {
-   // submit playlist name
-   // create an element using the name
-   // change input box to song adding box
-   //+ get the data w/ $http, of one song
+'use strict';
 
-   // how do we get the song from the form
-   // when we submit, we pass the typed text
-   // into a function, the function then calls the factory function
-   // we will add a child state
-   // to the playlist state state
+juke.factory('PlaylistFactory', function ($http, SongFactory) {
 
-   // then start generating rown on table with added songs
-   var cachedPlaylists = [];
+  var cachedPlaylists = [];
 
-    var PlaylistFactory = {};
+  var PlaylistFactory = {};
 
-    PlaylistFactory.create = function (data) {
-        return $http.post('/api/playlists', data)
-        .then(function (response) {
-          var playlist = response.data;
-          cachedPlaylists.push(playlist)
-          return playlist;
-        });
-    };
-
-    PlaylistFactory.getAll = function () {
-      return $http.get("/api/playlists")
-      .then(function (response) {
-        angular.copy(response.data, cachedPlaylists)
-        return cachedPlaylists;
-      })
-   }
-
-   PlaylistFactory.getOnePlaylist = function (playlistName) {
-    // get from array
-    cachedPlaylists.forEach(function (element) {
-      if (element.name == playlistName) {
-        return element;
-      }
-    })
-   }
-
-   PlaylistFactory.addSongToPlaylist = function (playlist, song) {
-    return $http.post("/" + playlist._id + "/songs", song)
+  PlaylistFactory.fetchAll = function () {
+    return $http.get('/api/playlists')
     .then(function (response) {
-      console.log(response)
-      return response;
-    })
-   }
+      angular.copy(response.data, cachedPlaylists);
+      return cachedPlaylists;
+    });
+  };
 
-    return PlaylistFactory;
+  PlaylistFactory.fetchById = function (id) {
+    return $http.get('/api/playlists/' + id)
+    .then(function (response) {
+      return response.data;
+    })
+    .then(function (playlist) {
+      playlist.songs = playlist.songs.map(function (song) {
+        return SongFactory.convert(song, playlist.artists);
+      });
+      return playlist;
+    });
+  };
+
+  PlaylistFactory.create = function (data) {
+    return $http.post('/api/playlists', data)
+    .then(function (response) {
+      var playlist = response.data;
+      cachedPlaylists.push(playlist);
+      return playlist;
+    });
+  };
+
+  PlaylistFactory.addSong = function (id, songData) {
+    return $http.post('/api/playlists/' + id + '/songs', {song: songData})
+    .then(function (response) {
+      return response.data;
+    })
+    .then(SongFactory.convert);
+  };
+
+  return PlaylistFactory;
 
 });

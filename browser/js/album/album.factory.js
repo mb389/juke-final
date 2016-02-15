@@ -4,27 +4,11 @@ juke.factory('AlbumFactory', function ($http, SongFactory) {
 
   var AlbumFactory = {};
 
-  var cachedSongs = []
-
   AlbumFactory.fetchAll = function () {
     return $http.get('/api/albums')
     .then(response => response.data)
-    .then(function (albums1) {
-      albums1.forEach(function (eachAlbum, index, albums) {
-      albums[index] = AlbumFactory.convert(eachAlbum);
-      cachedSongs = cachedSongs.concat(eachAlbum.songs);
-      })
-      console.log(cachedSongs);
-      return albums1;
-    });
+    .then(albums => albums.map(AlbumFactory.convert) );
   };
-
-  AlbumFactory.getAllSongs = function () {
-    AlbumFactory.fetchAll()
-    .then(function () {
-      return cachedSongs;
-    })
-  }
 
   AlbumFactory.fetchById = function (id) {
     return $http.get('/api/albums/' + id)

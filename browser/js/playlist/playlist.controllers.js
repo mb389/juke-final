@@ -1,36 +1,63 @@
-juke.controller('PlaylistCtrl', function ($scope, $rootScope, PlayerFactory, PlaylistFactory, AlbumFactory, SongFactory) {
+'use strict';
 
-   $scope.addTitle = function() {
-      PlaylistFactory.create($scope.playlistInput);
-      // $scope.playlistInput.name="";
-      $scope.playlistForm.name.$touched=false;
-      console.log($scope.playlistInput);
-   }
+// Create-playlist view
 
-   $scope.getPlaylist = PlaylistFactory.getOnePlaylist; // invoke on DOM
+juke.controller('PlaylistFormCtrl', function ($scope, $state, PlaylistFactory) {
 
-  SongFactory.getAllSongs()
-  .then(function (allSongs) {
-    $scope.songs = allSongs;
-    $scope.selected = $scope.songs[0];
+  $scope.createPlaylist = function () {
+    $scope.hasSubmitted = true;
+    PlaylistFactory
+    .create($scope.newPlaylist)
+    .then(function (playlist) {
+      $state.go('playlist', {playlistId: playlist._id});
+    })
+    .catch(function (err) {
+      $scope.hasSubmitted = false;
+      $scope.serverError = err.message || 'Something went wrong!';
+    });
+  };
+
+});
+
+// All-playlists sidebar
+
+juke.controller('PlaylistsCtrl', function ($scope, PlaylistFactory) {
+
+  PlaylistFactory.fetchAll()
+  .then(function (playlists) {
+    $scope.playlists = playlists;
   });
 
-  $scope.addToPlaylist = PlaylistFactory.addSongToPlaylist;
-  
+});
+
+// Single-playlist view
+
+juke.controller('PlaylistCtrl', function ($scope, thePlaylist, PlaylistFactory, PlayerFactory) {
+
+  $scope.playlist = thePlaylist;
+
+  $scope.addSong = function (song) {
+    return PlaylistFactory.addSong($scope.playlist._id, song)
+    .then(function (addedSong) {
+      $scope.playlist.songs.push(addedSong);
+      return addedSong;
+    });
+  };
+  //
   // $scope.toggle = function (song) {
   //   if (song !== PlayerFactory.getCurrentSong()) {
-  //     PlayerFactory.start(song, $scope.album.songs);
+  //     PlayerFactory.start(song, $scope.playlist.songs);
   //   } else if ( PlayerFactory.isPlaying() ) {
   //     PlayerFactory.pause();
   //   } else {
   //     PlayerFactory.resume();
   //   }
   // };
-
+  //
   // $scope.getCurrentSong = function () {
   //   return PlayerFactory.getCurrentSong();
   // };
-
+  //
   // $scope.isPlaying = function (song) {
   //   return PlayerFactory.isPlaying() && PlayerFactory.getCurrentSong() === song;
   // };
